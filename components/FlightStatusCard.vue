@@ -31,7 +31,7 @@
             :disabled="isRefreshing"
             @click.stop="$emit('refresh')"
           >
-            <Icon name="lucide:refresh-cw" class="w-4 h-4" :class="isRefreshing ? 'animate-spin text-brand-300' : ''" />
+            <IconRefresh class="w-4 h-4" :class="isRefreshing ? 'animate-spin text-brand-300' : ''" />
           </button>
           <button
             class="w-9 h-9 rounded-full flex items-center justify-center text-surface-100/25 hover:text-amber-300 hover:bg-amber-500/10 transition-colors"

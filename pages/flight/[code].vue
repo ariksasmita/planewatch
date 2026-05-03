@@ -31,7 +31,7 @@
           class="inline-flex items-center gap-2 rounded-full border border-surface-700/50 px-3 py-1.5 text-sm text-surface-100/45 hover:border-brand-400/40 hover:text-brand-300 transition-colors"
           @click="refreshFlight"
         >
-          <Icon name="lucide:refresh-cw" class="w-4 h-4" :class="isRefreshing ? 'animate-spin' : ''" />
+          <IconRefresh class="w-4 h-4" :class="isRefreshing ? 'animate-spin' : ''" />
           Refresh
         </button>
         <button
