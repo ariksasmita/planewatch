@@ -31,9 +31,25 @@ html.light .bg-surface-800\/40 {
   background-color: #ffffff !important;
 }
 
+html.light .bg-gradient-to-br.from-surface-800.to-surface-900 {
+  background-image: linear-gradient(to bottom right, #ffffff, #e0f2fe) !important;
+}
+
+html.light .from-surface-800 {
+  --tw-gradient-from: #ffffff var(--tw-gradient-from-position) !important;
+  --tw-gradient-to: rgb(255 255 255 / 0) var(--tw-gradient-to-position) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+}
+
+html.light .to-surface-900 {
+  --tw-gradient-to: #e0f2fe var(--tw-gradient-to-position) !important;
+}
+
 html.light .bg-surface-700\/50,
-html.light .bg-surface-950\/30 {
-  background-color: #f1f5f9 !important;
+html.light .bg-surface-950\/30,
+html.light .bg-brand-500\/10,
+html.light .hover\:bg-brand-500\/15:hover {
+  background-color: #ecfeff !important;
 }
 
 html.light .border-surface-700\/30,
@@ -46,6 +62,8 @@ html.light .text-surface-50 {
 }
 
 html.light .text-surface-100,
+html.light .text-surface-100\/70,
+html.light .text-surface-100\/60,
 html.light .text-surface-100\/55,
 html.light .text-surface-100\/50,
 html.light .text-surface-100\/45,
@@ -53,6 +71,19 @@ html.light .text-surface-100\/40,
 html.light .text-surface-100\/35,
 html.light .text-surface-100\/30 {
   color: #334155 !important;
+}
+
+html.light .text-brand-200,
+html.light .text-brand-300,
+html.light .text-brand-300\/70,
+html.light .text-brand-400 {
+  color: #0e7490 !important;
+}
+
+html.light .border-brand-500\/20,
+html.light .border-brand-500\/30,
+html.light .border-brand-400\/50 {
+  border-color: #67e8f9 !important;
 }
 
 html.light .placeholder\:text-surface-100\/30::placeholder {
