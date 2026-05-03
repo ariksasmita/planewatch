@@ -71,7 +71,7 @@
               <dd class="text-surface-50 font-medium">{{ flight.flight.codeshared }}</dd>
             </div>
             <div v-if="flight.codeshareStatus" class="flex justify-between">
-              <dt class="text-surface-100/50">Operator Status</dt>
+              <dt class="text-surface-100/50">Operation</dt>
               <dd class="text-surface-50 font-medium">{{ flight.codeshareStatus }}</dd>
             </div>
             <div v-if="flight.distanceKm" class="flex justify-between">

@@ -61,6 +61,16 @@ function normalizeFlightNumber(number: string) {
   return number.replace(/\s+/g, '')
 }
 
+function mapCodeshareStatus(status?: string) {
+  const labels: Record<string, string> = {
+    IsOperator: 'Operating airline',
+    IsCodeshared: 'Codeshare flight',
+    IsWetLeased: 'Wet-leased operation',
+  }
+
+  return status ? labels[status] || status : undefined
+}
+
 function aeroToFlight(flight: AeroDataBoxFlight): Flight {
   const iataCode = normalizeFlightNumber(flight.number)
   const icaoCode = flight.callSign || iataCode
@@ -69,7 +79,7 @@ function aeroToFlight(flight: AeroDataBoxFlight): Flight {
     provider: 'AeroDataBox',
     lastUpdatedUtc: normalizeDate(flight.lastUpdatedUtc),
     distanceKm: flight.greatCircleDistance?.km,
-    codeshareStatus: flight.codeshareStatus,
+    codeshareStatus: mapCodeshareStatus(flight.codeshareStatus),
     flight_date: normalizeDate(flight.departure.scheduledTime?.utc || flight.arrival.scheduledTime?.utc).slice(0, 10),
     flight_status: mapStatus(flight.status),
     departure: mapAirport(flight.departure),
