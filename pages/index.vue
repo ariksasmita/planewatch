@@ -10,8 +10,9 @@
       </p>
 
       <SearchBar @search="handleSearch" :is-loading="store.isLoading" />
+      <SearchExamples @select="handleSearch" />
 
-      <p v-if="store.error" class="mt-4 text-red-400 text-sm">{{ store.error }}</p>
+      <p v-if="store.error" class="mt-4 text-red-400 text-sm max-w-xl mx-auto">{{ store.error }}</p>
     </section>
 
     <!-- Recent searches -->
@@ -56,9 +57,30 @@ const store = useFlightStore()
 const aeroDataBoxApi = useAeroDataBoxApi()
 const aviationStackApi = useAviationApi()
 const adsbApi = useAdsbApi()
+const cache = useFlightSearchCache()
 const router = useRouter()
 
+function friendlySearchError(code: string, errorMessages: string[]) {
+  const joined = errorMessages.join(' ').toLowerCase()
+
+  if (joined.includes('429') || joined.includes('rate limit') || joined.includes('too many')) {
+    return 'Too many searches too quickly. Please wait a few seconds and try again.'
+  }
+
+  if (joined.includes('api key') || joined.includes('not configured')) {
+    return 'Flight data provider is not configured. Check your API key settings.'
+  }
+
+  if (joined.includes('invalid')) {
+    return 'That flight code format looks invalid. Try something like GIA401, GA401, DAL496, or DL496.'
+  }
+
+  return `No flight data found for ${code.toUpperCase()}. Try the operator callsign version, like GIA401 instead of GA401.`
+}
+
 async function handleSearch(code: string) {
+  const normalizedCode = code.trim().toUpperCase().replace(/\s+/g, '')
+
   store.isLoading = true
   store.error = null
   store.flights = []
@@ -66,37 +88,58 @@ async function handleSearch(code: string) {
   store.selectedFlight = null
   store.selectedLiveAircraft = null
 
+  const cached = cache.get(normalizedCode)
+  if (cached) {
+    store.flights = cached.flights
+    store.liveAircraft = cached.liveAircraft
+    store.addRecentSearch(normalizedCode)
+    store.isLoading = false
+    return
+  }
+
+  const errors: string[] = []
+
   try {
     // Primary provider: AeroDataBox via server route (keeps RapidAPI key private).
-    store.flights = await aeroDataBoxApi.fetchByFlightCode(code)
-    store.addRecentSearch(code)
+    store.flights = await aeroDataBoxApi.fetchByFlightCode(normalizedCode)
+    store.addRecentSearch(normalizedCode)
 
     if (store.flights.length === 0) {
-      throw new Error(`No AeroDataBox results for ${code.toUpperCase()}`)
+      throw new Error(`No AeroDataBox results for ${normalizedCode}`)
     }
   }
   catch (aeroError: any) {
+    errors.push(aeroError?.message || 'AeroDataBox failed')
     try {
       // Secondary provider: AviationStack, if configured.
-      store.flights = await aviationStackApi.fetchByFlightCode(code)
-      store.addRecentSearch(code)
+      store.flights = await aviationStackApi.fetchByFlightCode(normalizedCode)
+      store.addRecentSearch(normalizedCode)
     }
     catch (aviationError: any) {
+      errors.push(aviationError?.message || 'AviationStack failed')
       // Last fallback: live ADS-B callsign lookup. Best for ICAO-style callsigns: GIA401, DAL496.
       try {
-        store.liveAircraft = await adsbApi.fetchByCallsign(code)
-        store.addRecentSearch(code)
+        store.liveAircraft = await adsbApi.fetchByCallsign(normalizedCode)
+        store.addRecentSearch(normalizedCode)
 
         if (store.liveAircraft.length === 0) {
-          store.error = `${aeroError.message || 'No AeroDataBox data found'} ${aviationError.message || 'No AviationStack data found'} Also found no live ADS-B aircraft for ${code.toUpperCase()}.`
+          store.error = friendlySearchError(normalizedCode, errors)
         }
       }
       catch (adsbError: any) {
-        store.error = `${aeroError.message || 'No AeroDataBox data found'} ${aviationError.message || 'No AviationStack data found'} ADS-B fallback failed: ${adsbError.message || 'unknown error'}`
+        errors.push(adsbError?.message || 'ADS-B failed')
+        store.error = friendlySearchError(normalizedCode, errors)
       }
     }
   }
   finally {
+    if (store.flights.length > 0 || store.liveAircraft.length > 0) {
+      cache.set(normalizedCode, {
+        flights: store.flights,
+        liveAircraft: store.liveAircraft,
+      })
+    }
+
     store.isLoading = false
   }
 }

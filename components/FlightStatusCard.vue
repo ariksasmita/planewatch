@@ -13,6 +13,7 @@
       <div class="flex items-center gap-2 mb-1">
         <span class="font-display font-semibold text-surface-50 text-lg">{{ flight.flight.iata }}</span>
         <FlightStatusBadge :status="flight.flight_status" :compact="true" />
+        <ProviderBadge :provider="flight.provider" />
       </div>
       <div class="text-sm text-surface-100/50">
         {{ flight.airline.name }}

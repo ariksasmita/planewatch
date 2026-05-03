@@ -21,6 +21,7 @@
           {{ flight.flight.iata }}
         </h1>
         <FlightStatusBadge :status="flight.flight_status" />
+        <ProviderBadge :provider="flight.provider" />
       </div>
 
       <!-- Route info -->
@@ -69,6 +70,18 @@
               <dt class="text-surface-100/50">Codeshare</dt>
               <dd class="text-surface-50 font-medium">{{ flight.flight.codeshared }}</dd>
             </div>
+            <div v-if="flight.codeshareStatus" class="flex justify-between">
+              <dt class="text-surface-100/50">Operator Status</dt>
+              <dd class="text-surface-50 font-medium">{{ flight.codeshareStatus }}</dd>
+            </div>
+            <div v-if="flight.distanceKm" class="flex justify-between">
+              <dt class="text-surface-100/50">Distance</dt>
+              <dd class="text-surface-50 font-medium">{{ Math.round(flight.distanceKm).toLocaleString() }} km</dd>
+            </div>
+            <div v-if="flight.lastUpdatedUtc" class="flex justify-between">
+              <dt class="text-surface-100/50">Last Updated</dt>
+              <dd class="text-surface-50 font-medium">{{ formatDateTime(flight.lastUpdatedUtc) }}</dd>
+            </div>
           </dl>
         </div>
       </div>
@@ -105,6 +118,17 @@ const flight = computed(() => {
 
   return store.flights.find(f => f.flight.iata === flightCode || f.flight.icao === flightCode) ?? null
 })
+
+function formatDateTime(iso: string) {
+  if (!iso) return '—'
+  const date = new Date(iso)
+  return date.toLocaleString([], {
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  })
+}
 
 onMounted(async () => {
   if (flight.value) return

@@ -113,7 +113,10 @@ export function useAviationApi() {
       )
     }
 
-    return deduped
+    return deduped.map(flight => ({
+      ...flight,
+      provider: 'AviationStack' as const,
+    }))
   }
 
   return { fetchByFlightCode }

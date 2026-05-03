@@ -52,6 +52,10 @@ function aeroToFlight(flight: AeroDataBoxFlight): Flight {
   const icaoCode = flight.callSign || iataCode
 
   return {
+    provider: 'AeroDataBox',
+    lastUpdatedUtc: normalizeDate(flight.lastUpdatedUtc),
+    distanceKm: flight.greatCircleDistance?.km,
+    codeshareStatus: flight.codeshareStatus,
     flight_date: normalizeDate(flight.departure.scheduledTime?.utc || flight.arrival.scheduledTime?.utc).slice(0, 10),
     flight_status: mapStatus(flight.status),
     departure: mapAirport(flight.departure),

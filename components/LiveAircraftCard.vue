@@ -12,9 +12,7 @@
     <div class="flex-1 min-w-0">
       <div class="flex items-center gap-2 mb-1">
         <span class="font-display font-semibold text-surface-50 text-lg">{{ result.callsign }}</span>
-        <span class="inline-flex items-center rounded-full text-xs font-medium px-2.5 py-1 bg-amber-500/20 text-amber-400">
-          ADS-B Live
-        </span>
+        <ProviderBadge provider="ADS-B" />
       </div>
       <div class="text-sm text-surface-100/50">
         {{ aircraft.r || 'Unknown registration' }}

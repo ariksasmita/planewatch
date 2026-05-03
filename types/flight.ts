@@ -1,6 +1,10 @@
 // AviationStack API response types
 
 export interface Flight {
+  provider?: 'AeroDataBox' | 'AviationStack'
+  lastUpdatedUtc?: string
+  distanceKm?: number
+  codeshareStatus?: string
   flight_date: string
   flight_status: FlightStatus
   departure: AirportInfo
