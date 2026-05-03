@@ -24,14 +24,24 @@
           </div>
         </div>
 
-        <button
-          class="w-9 h-9 rounded-full flex-shrink-0 flex items-center justify-center text-surface-100/25 hover:text-amber-300 hover:bg-amber-500/10 transition-colors md:order-3"
-          :class="isWatched ? 'text-amber-300 bg-amber-500/10' : ''"
-          :title="isWatched ? 'Remove from watched flights' : 'Watch this flight'"
-          @click.stop="$emit('toggle-watch')"
-        >
-          <IconStar class="w-4 h-4" :filled="isWatched" />
-        </button>
+        <div class="flex flex-shrink-0 items-center gap-1 md:order-3">
+          <button
+            class="w-9 h-9 rounded-full flex items-center justify-center text-surface-100/25 hover:text-brand-300 hover:bg-brand-500/10 transition-colors"
+            :title="isRefreshing ? 'Refreshing flight' : 'Refresh this flight'"
+            :disabled="isRefreshing"
+            @click.stop="$emit('refresh')"
+          >
+            <Icon name="lucide:refresh-cw" class="w-4 h-4" :class="isRefreshing ? 'animate-spin text-brand-300' : ''" />
+          </button>
+          <button
+            class="w-9 h-9 rounded-full flex items-center justify-center text-surface-100/25 hover:text-amber-300 hover:bg-amber-500/10 transition-colors"
+            :class="isWatched ? 'text-amber-300 bg-amber-500/10' : ''"
+            :title="isWatched ? 'Remove from watched flights' : 'Watch this flight'"
+            @click.stop="$emit('toggle-watch')"
+          >
+            <IconStar class="w-4 h-4" :filled="isWatched" />
+          </button>
+        </div>
       </div>
 
       <!-- Route -->
@@ -60,10 +70,12 @@ import type { Flight } from '~/types/flight'
 defineProps<{
   flight: Flight
   isWatched?: boolean
+  isRefreshing?: boolean
 }>()
 
 defineEmits<{
   click: []
+  refresh: []
   'toggle-watch': []
 }>()
 

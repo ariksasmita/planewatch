@@ -42,6 +42,8 @@
           :key="flight.flight.iata"
           :flight="flight"
           :is-watched="store.isWatched(flight.flight.iata)"
+          :is-refreshing="refreshingFlightCode === flight.flight.iata"
+          @refresh="refreshFlight(flight)"
           @toggle-watch="store.toggleWatched(flight.flight.iata)"
           @click="navigateToDetail(flight)"
         />
@@ -73,6 +75,7 @@ const aeroDataBoxApi = useAeroDataBoxApi()
 const adsbApi = useAdsbApi()
 const cache = useFlightSearchCache()
 const router = useRouter()
+const refreshingFlightCode = ref<string | null>(null)
 
 function friendlySearchError(code: string, errorMessages: string[]) {
   const joined = errorMessages.join(' ').toLowerCase()
@@ -150,6 +153,32 @@ async function handleSearch(code: string) {
     }
 
     store.isLoading = false
+  }
+}
+
+async function refreshFlight(flight: Flight) {
+  const code = flight.flight.iata || flight.flight.icao
+  if (!code || refreshingFlightCode.value) return
+
+  refreshingFlightCode.value = code
+  store.error = null
+
+  try {
+    const freshFlights = await aeroDataBoxApi.fetchByFlightCode(code)
+    if (freshFlights.length) {
+      store.flights = store.flights.map(current => current.flight.iata === code || current.flight.icao === code ? freshFlights[0] : current)
+      cache.set(code, {
+        flights: freshFlights,
+        liveAircraft: store.liveAircraft,
+      })
+      store.lastResultFromCache = false
+    }
+  }
+  catch (error: any) {
+    store.error = error?.message || `Could not refresh ${code}`
+  }
+  finally {
+    refreshingFlightCode.value = null
   }
 }
 
