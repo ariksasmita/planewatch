@@ -58,6 +58,8 @@ npm run dev       # start local dev server
 npm run build     # production build
 npm run preview   # preview production build
 npm run generate  # static generation
+npm run test      # utility smoke tests
+npm run test:secrets # build and verify secret sentinels are not bundled
 ```
 
 ## Deployment
@@ -67,7 +69,7 @@ PlaneWatch is configured as a CSR Nuxt app, but it still uses a Nuxt server API 
 Good options include:
 
 - Vercel
-- Netlify
+- Netlify (`netlify.toml` is included)
 - Render
 - Railway
 - Fly.io

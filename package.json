@@ -7,6 +7,8 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
+    "test": "node scripts/test-flight-codes.mjs",
+    "test:secrets": "NUXT_AERODATABOX_RAPID_API_KEY=planewatch_secret_sentinel npm run build && node scripts/check-secrets-not-bundled.mjs planewatch_secret_sentinel",
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
