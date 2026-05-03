@@ -7,50 +7,54 @@
     @apply bg-surface-950 text-surface-50 font-body;
   }
 
-  html.light body {
-    @apply bg-slate-100 text-slate-950;
-  }
-
-  html.light .bg-surface-950,
-  html.light .bg-surface-950\/80 {
-    @apply bg-slate-100;
-  }
-
-  html.light .bg-surface-900,
-  html.light .bg-surface-900\/95,
-  html.light .bg-surface-800,
-  html.light .bg-surface-800\/70,
-  html.light .bg-surface-800\/50,
-  html.light .bg-surface-800\/40 {
-    @apply bg-white;
-  }
-
-  html.light .bg-surface-700\/50,
-  html.light .bg-surface-950\/30 {
-    @apply bg-slate-100;
-  }
-
-  html.light .border-surface-700\/30,
-  html.light .border-surface-700\/50 {
-    @apply border-slate-200;
-  }
-
-  html.light .text-surface-50,
-  html.light .text-surface-100,
-  html.light .text-surface-100\/55,
-  html.light .text-surface-100\/50,
-  html.light .text-surface-100\/45,
-  html.light .text-surface-100\/40,
-  html.light .text-surface-100\/35,
-  html.light .text-surface-100\/30 {
-    @apply text-slate-700;
-  }
-
-  html.light .text-surface-50 {
-    @apply text-slate-950;
-  }
-
   h1, h2, h3, h4 {
     @apply font-display;
   }
+}
+
+html.light body {
+  background: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+html.light .bg-surface-950,
+html.light .bg-surface-950\/80 {
+  background-color: #f1f5f9 !important;
+}
+
+html.light .bg-surface-900,
+html.light .bg-surface-900\/95,
+html.light .bg-surface-800,
+html.light .bg-surface-800\/70,
+html.light .bg-surface-800\/50,
+html.light .bg-surface-800\/40 {
+  background-color: #ffffff !important;
+}
+
+html.light .bg-surface-700\/50,
+html.light .bg-surface-950\/30 {
+  background-color: #f1f5f9 !important;
+}
+
+html.light .border-surface-700\/30,
+html.light .border-surface-700\/50 {
+  border-color: #e2e8f0 !important;
+}
+
+html.light .text-surface-50 {
+  color: #020617 !important;
+}
+
+html.light .text-surface-100,
+html.light .text-surface-100\/55,
+html.light .text-surface-100\/50,
+html.light .text-surface-100\/45,
+html.light .text-surface-100\/40,
+html.light .text-surface-100\/35,
+html.light .text-surface-100\/30 {
+  color: #334155 !important;
+}
+
+html.light .placeholder\:text-surface-100\/30::placeholder {
+  color: #94a3b8 !important;
 }

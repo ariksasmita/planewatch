@@ -5,6 +5,8 @@ export default defineNuxtConfig({
 
   ssr: false, // CSR mode
 
+  css: ['~/assets/css/main.css'],
+
   modules: [
     '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
