@@ -46,7 +46,7 @@
       :title="isWatched ? 'Remove from watched flights' : 'Watch this flight'"
       @click.stop="$emit('toggle-watch')"
     >
-      <Icon name="lucide:star" class="w-4 h-4" :class="isWatched ? 'fill-current' : ''" />
+      <IconStar class="w-4 h-4" :filled="isWatched" />
     </button>
 
     <!-- Arrow -->

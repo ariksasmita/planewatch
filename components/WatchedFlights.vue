@@ -12,7 +12,7 @@
         class="inline-flex items-center gap-2 rounded-full border border-brand-500/20 bg-brand-500/10 px-4 py-2 text-sm font-medium text-brand-200 hover:border-brand-400/50 hover:bg-brand-500/15 transition-colors"
         @click="$emit('select', code)"
       >
-        <Icon name="lucide:star" class="w-3.5 h-3.5 fill-current" />
+        <IconStar class="w-3.5 h-3.5" :filled="true" />
         {{ code }}
       </button>
     </div>

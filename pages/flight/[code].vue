@@ -24,14 +24,14 @@
           :class="store.isWatched(flight.flight.iata) ? 'border-amber-400/40 bg-amber-500/10 text-amber-300' : 'border-surface-700/50 text-surface-100/45 hover:border-amber-400/40 hover:text-amber-300'"
           @click="store.toggleWatched(flight.flight.iata)"
         >
-          <Icon name="lucide:star" class="w-4 h-4" :class="store.isWatched(flight.flight.iata) ? 'fill-current' : ''" />
+          <IconStar class="w-4 h-4" :filled="store.isWatched(flight.flight.iata)" />
           {{ store.isWatched(flight.flight.iata) ? 'Watched' : 'Watch' }}
         </button>
         <button
           class="inline-flex items-center gap-2 rounded-full border border-surface-700/50 px-3 py-1.5 text-sm text-surface-100/45 hover:border-brand-400/40 hover:text-brand-300 transition-colors"
           @click="shareFlight"
         >
-          <Icon name="lucide:share-2" class="w-4 h-4" />
+          <IconShare class="w-4 h-4" />
           Share
         </button>
       </div>
