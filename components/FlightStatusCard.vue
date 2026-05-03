@@ -4,7 +4,7 @@
     @click="$emit('click')"
   >
     <div class="md:flex md:items-center md:gap-6">
-      <div class="flex items-start gap-3 min-w-0 pr-20 md:pr-0 md:flex-1">
+      <div class="flex items-start gap-3 min-w-0 pr-20 md:items-center md:pr-0 md:flex-1">
         <!-- Airline + flight code -->
         <div class="flex-shrink-0">
           <AirlineLogo :iata="flight.airline.iata" :name="flight.airline.name" size="lg" />
