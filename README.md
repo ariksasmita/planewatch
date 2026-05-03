@@ -1,5 +1,7 @@
 # PlaneWatch
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 PlaneWatch is a Nuxt/Vue flight status tracker. Search by flight number or callsign to see current status, route, schedule timing, aircraft information, and a map of the route.
 
 **Live demo:** https://planewatch.netlify.app/
@@ -127,6 +129,10 @@ Maps use Leaflet with free CARTO dark tiles based on OpenStreetMap data. No map 
 - ADS-B live overlay only appears when the aircraft is currently visible and broadcasting under a matching callsign.
 - Some flights may report `Unknown` status depending on provider data freshness.
 - Direct detail page loads use the same external provider limits as normal searches.
+
+## License
+
+MIT License. See [LICENSE](LICENSE).
 
 ## Project Structure
 
