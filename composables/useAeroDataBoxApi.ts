@@ -11,11 +11,14 @@ function mapStatus(status: string): FlightStatus {
   const normalized = status.toLowerCase()
 
   if (normalized.includes('arriv') || normalized.includes('land')) return 'landed'
-  if (normalized.includes('depart') || normalized.includes('en-route') || normalized.includes('active')) return 'active'
+  if (normalized.includes('depart')) return 'departed'
+  if (normalized.includes('en-route') || normalized.includes('active')) return 'active'
+  if (normalized.includes('expect')) return 'expected'
   if (normalized.includes('cancel')) return 'cancelled'
   if (normalized.includes('divert')) return 'diverted'
   if (normalized.includes('delay')) return 'delayed'
   if (normalized.includes('incident')) return 'incident'
+  if (normalized.includes('unknown')) return 'unknown'
 
   return 'scheduled'
 }
@@ -29,6 +32,17 @@ function mapAirport(event: AeroDataBoxFlight['departure'] | AeroDataBoxFlight['a
     airport: event.airport.name || event.airport.shortName || event.airport.iata || event.airport.icao || 'Unknown airport',
     timezone: event.airport.timeZone || '',
     location: event.airport.location,
+    times: {
+      scheduledUtc: normalizeDate(event.scheduledTime?.utc),
+      scheduledLocal: event.scheduledTime?.local,
+      revisedUtc: normalizeDate(event.revisedTime?.utc),
+      revisedLocal: event.revisedTime?.local,
+      predictedUtc: normalizeDate(event.predictedTime?.utc),
+      predictedLocal: event.predictedTime?.local,
+      runwayUtc: normalizeDate(event.runwayTime?.utc),
+      runwayLocal: event.runwayTime?.local,
+    },
+    quality: event.quality,
     iata: event.airport.iata || null,
     icao: event.airport.icao || null,
     terminal: event.terminal || null,

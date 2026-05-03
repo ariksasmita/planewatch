@@ -15,7 +15,7 @@ export interface Flight {
   live: LiveTracking | null
 }
 
-export type FlightStatus = 'scheduled' | 'active' | 'landed' | 'diverted' | 'cancelled' | 'incident' | 'delayed'
+export type FlightStatus = 'scheduled' | 'active' | 'landed' | 'diverted' | 'cancelled' | 'incident' | 'delayed' | 'unknown' | 'expected' | 'departed'
 
 export interface AirportInfo {
   airport: string
@@ -24,6 +24,8 @@ export interface AirportInfo {
     lat: number
     lon: number
   }
+  times?: AirportTimes
+  quality?: string[]
   iata: string | null
   icao: string | null
   terminal: string | null
@@ -35,6 +37,17 @@ export interface AirportInfo {
   actual: string | null
   estimated_runway: string | null
   actual_runway: string | null
+}
+
+export interface AirportTimes {
+  scheduledUtc?: string
+  scheduledLocal?: string
+  revisedUtc?: string
+  revisedLocal?: string
+  predictedUtc?: string
+  predictedLocal?: string
+  runwayUtc?: string
+  runwayLocal?: string
 }
 
 export interface AirlineInfo {

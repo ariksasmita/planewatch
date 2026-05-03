@@ -23,6 +23,9 @@ const statusConfig: Record<FlightStatus, { label: string; color: string; icon: s
   cancelled: { label: 'Cancelled', color: 'bg-red-500/20 text-red-300', icon: 'lucide:x-circle' },
   delayed: { label: 'Delayed', color: 'bg-amber-500/20 text-amber-400', icon: 'lucide:clock-alert' },
   incident: { label: 'Incident', color: 'bg-red-500/20 text-red-300', icon: 'lucide:alert-octagon' },
+  unknown: { label: 'Unknown', color: 'bg-surface-700/60 text-surface-100/60', icon: 'lucide:circle-help' },
+  expected: { label: 'Expected', color: 'bg-cyan-500/20 text-cyan-300', icon: 'lucide:calendar-clock' },
+  departed: { label: 'Departed', color: 'bg-green-500/20 text-green-300', icon: 'lucide:plane-takeoff' },
 }
 
 const config = computed(() => statusConfig[props.status] ?? statusConfig.scheduled)
