@@ -15,6 +15,8 @@
       <p v-if="store.error" class="mt-4 text-red-400 text-sm max-w-xl mx-auto">{{ store.error }}</p>
     </section>
 
+    <WatchedFlights v-if="!store.isLoading" :flights="store.watchedFlights" @select="handleSearch" />
+
     <!-- Recent searches -->
     <section v-if="store.recentSearches.length > 0 && !store.isLoading" class="mb-12">
       <RecentSearches :searches="store.recentSearches" @select="handleSearch" @clear="store.clearRecentSearches()" />
@@ -30,12 +32,17 @@
 
     <!-- Results -->
     <section v-else-if="store.flights.length > 0 || store.liveAircraft.length > 0">
-      <h2 class="font-display text-xl font-semibold text-surface-100 mb-4">Results</h2>
+      <div class="flex items-center gap-3 mb-4">
+        <h2 class="font-display text-xl font-semibold text-surface-100">Results</h2>
+        <span v-if="store.lastResultFromCache" class="rounded-full bg-surface-700/50 px-2.5 py-1 text-xs text-surface-100/45">Cached</span>
+      </div>
       <div class="space-y-4">
         <FlightStatusCard
           v-for="flight in store.flights"
           :key="flight.flight.iata"
           :flight="flight"
+          :is-watched="store.isWatched(flight.flight.iata)"
+          @toggle-watch="store.toggleWatched(flight.flight.iata)"
           @click="navigateToDetail(flight)"
         />
         <LiveAircraftCard
@@ -95,12 +102,14 @@ async function handleSearch(code: string) {
   store.liveAircraft = []
   store.selectedFlight = null
   store.selectedLiveAircraft = null
+  store.lastResultFromCache = false
 
   const cached = cache.get(normalizedCode)
   if (cached) {
     store.flights = cached.flights
     store.liveAircraft = cached.liveAircraft
     store.addRecentSearch(normalizedCode)
+    store.lastResultFromCache = true
     store.isLoading = false
     return
   }

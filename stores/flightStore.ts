@@ -10,8 +10,10 @@ export const useFlightStore = defineStore('flight', () => {
   const isLoading = ref(false)
   const error = ref<string | null>(null)
 
-  // Recent searches (persisted to localStorage)
+  // Recent searches and watched flights (persisted to localStorage)
   const recentSearches = ref<FlightSearch[]>([])
+  const watchedFlights = ref<string[]>([])
+  const lastResultFromCache = ref(false)
 
   // Load recent searches from localStorage on init
   function loadRecent() {
@@ -20,6 +22,14 @@ export const useFlightStore = defineStore('flight', () => {
       if (stored) {
         try {
           recentSearches.value = JSON.parse(stored)
+        }
+        catch {}
+      }
+
+      const watched = localStorage.getItem('planewatch-watched')
+      if (watched) {
+        try {
+          watchedFlights.value = JSON.parse(watched)
         }
         catch {}
       }
@@ -48,6 +58,29 @@ export const useFlightStore = defineStore('flight', () => {
     saveRecent()
   }
 
+  function saveWatched() {
+    if (import.meta.client) {
+      localStorage.setItem('planewatch-watched', JSON.stringify(watchedFlights.value))
+    }
+  }
+
+  function isWatched(code: string) {
+    return watchedFlights.value.includes(code.toUpperCase())
+  }
+
+  function toggleWatched(code: string) {
+    const normalized = code.toUpperCase()
+    if (isWatched(normalized)) {
+      watchedFlights.value = watchedFlights.value.filter(item => item !== normalized)
+    }
+    else {
+      watchedFlights.value.unshift(normalized)
+      watchedFlights.value = watchedFlights.value.slice(0, 12)
+    }
+
+    saveWatched()
+  }
+
   // Initialize
   loadRecent()
 
@@ -59,7 +92,11 @@ export const useFlightStore = defineStore('flight', () => {
     isLoading,
     error,
     recentSearches,
+    watchedFlights,
+    lastResultFromCache,
     addRecentSearch,
     clearRecentSearches,
+    isWatched,
+    toggleWatched,
   }
 })

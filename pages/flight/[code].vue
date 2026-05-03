@@ -13,13 +13,30 @@
 
     <div v-else-if="flight">
       <!-- Flight header -->
-      <div class="flex items-center gap-3 mb-8">
+      <div class="flex flex-wrap items-center gap-3 mb-8">
         <h1 class="font-display text-3xl md:text-4xl font-bold text-surface-50">
           {{ flight.flight.iata }}
         </h1>
         <FlightStatusBadge :status="flight.flight_status" />
         <ProviderBadge :provider="flight.provider" />
+        <button
+          class="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm transition-colors"
+          :class="store.isWatched(flight.flight.iata) ? 'border-amber-400/40 bg-amber-500/10 text-amber-300' : 'border-surface-700/50 text-surface-100/45 hover:border-amber-400/40 hover:text-amber-300'"
+          @click="store.toggleWatched(flight.flight.iata)"
+        >
+          <Icon name="lucide:star" class="w-4 h-4" :class="store.isWatched(flight.flight.iata) ? 'fill-current' : ''" />
+          {{ store.isWatched(flight.flight.iata) ? 'Watched' : 'Watch' }}
+        </button>
+        <button
+          class="inline-flex items-center gap-2 rounded-full border border-surface-700/50 px-3 py-1.5 text-sm text-surface-100/45 hover:border-brand-400/40 hover:text-brand-300 transition-colors"
+          @click="shareFlight"
+        >
+          <Icon name="lucide:share-2" class="w-4 h-4" />
+          Share
+        </button>
       </div>
+
+      <ShareFlightCard :flight="flight" class="mb-8" />
 
       <!-- Route info -->
       <RouteInfo :departure="flight.departure" :arrival="flight.arrival" class="mb-8" />
@@ -142,6 +159,20 @@ function formatDateTime(iso: string) {
     hour: '2-digit',
     minute: '2-digit',
   })
+}
+
+async function shareFlight() {
+  if (!flight.value || !import.meta.client) return
+
+  const text = `${flight.value.flight.iata} ${flight.value.departure.iata || flight.value.departure.icao} → ${flight.value.arrival.iata || flight.value.arrival.icao} · ${flight.value.flight_status}`
+  const url = window.location.href
+
+  if (navigator.share) {
+    await navigator.share({ title: `PlaneWatch ${flight.value.flight.iata}`, text, url })
+    return
+  }
+
+  await navigator.clipboard.writeText(`${text}\n${url}`)
 }
 
 async function loadLiveOverlay() {

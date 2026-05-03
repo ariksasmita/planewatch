@@ -18,6 +18,9 @@
       <div class="text-sm text-surface-100/50">
         {{ flight.airline.name }}
       </div>
+      <div v-if="flight.lastUpdatedUtc" class="text-xs text-surface-100/30 mt-1">
+        Updated {{ formatDate(flight.lastUpdatedUtc) }}
+      </div>
     </div>
 
     <!-- Route -->
@@ -37,6 +40,15 @@
       </div>
     </div>
 
+    <button
+      class="w-9 h-9 rounded-full flex items-center justify-center text-surface-100/25 hover:text-amber-300 hover:bg-amber-500/10 transition-colors"
+      :class="isWatched ? 'text-amber-300 bg-amber-500/10' : ''"
+      :title="isWatched ? 'Remove from watched flights' : 'Watch this flight'"
+      @click.stop="$emit('toggle-watch')"
+    >
+      <Icon name="lucide:star" class="w-4 h-4" :class="isWatched ? 'fill-current' : ''" />
+    </button>
+
     <!-- Arrow -->
     <Icon name="lucide:chevron-right" class="w-5 h-5 text-surface-100/20 group-hover:text-brand-400 transition-colors" />
   </div>
@@ -47,11 +59,19 @@ import type { Flight } from '~/types/flight'
 
 defineProps<{
   flight: Flight
+  isWatched?: boolean
 }>()
 
 defineEmits<{
   click: []
+  'toggle-watch': []
 }>()
+
+function formatDate(iso?: string): string {
+  if (!iso) return '—'
+  const d = new Date(iso)
+  return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+}
 
 function formatTime(iso: string): string {
   if (!iso) return '—'

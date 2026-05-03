@@ -65,6 +65,28 @@ npm run preview   # preview production build
 npm run generate  # static generation
 ```
 
+## Deployment
+
+PlaneWatch is configured as a CSR Nuxt app, but it still uses a Nuxt server API route to keep the AeroDataBox/RapidAPI key private. Deploy it to any host that supports Nuxt/Nitro server routes or serverless functions.
+
+Good options include:
+
+- Vercel
+- Netlify
+- Render
+- Railway
+- Fly.io
+- Node server/VPS using `npm run build` and `.output/server/index.mjs`
+
+Set these environment variables in your hosting provider:
+
+```env
+AERODATABOX_RAPIDAPI_KEY=your_rapidapi_key_here
+NUXT_PUBLIC_AVIATION_STACK_API_KEY=your_aviationstack_key_here
+```
+
+If deploying to a purely static host, AeroDataBox calls will not work unless you also provide a separate backend/proxy for `/api/aerodatabox/flights/:code`.
+
 ## Example Searches
 
 Try:
