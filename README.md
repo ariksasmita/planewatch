@@ -2,6 +2,8 @@
 
 PlaneWatch is a Nuxt/Vue flight status tracker. Search by flight number or callsign to see current status, route, schedule timing, aircraft information, and a map of the route.
 
+![PlaneWatch home screen](docs/screenshot-home.png)
+
 ## Features
 
 - Search by IATA flight number (`GA401`, `DL496`) or ICAO callsign (`GIA401`, `DAL496`)
