@@ -1,7 +1,7 @@
 export type ThemeMode = 'dark' | 'light' | 'system'
 
 export function useThemeMode() {
-  const mode = useState<ThemeMode>('theme-mode', () => 'system')
+  const mode = useState<ThemeMode>('theme-mode', () => 'dark')
 
   function applyTheme() {
     if (!import.meta.client) return
@@ -25,7 +25,7 @@ export function useThemeMode() {
   }
 
   function cycleMode() {
-    setMode(mode.value === 'dark' ? 'light' : mode.value === 'light' ? 'system' : 'dark')
+    setMode(mode.value === 'dark' ? 'light' : mode.value === 'light' ? 'system' : 'light')
   }
 
   return { mode, loadTheme, setMode, cycleMode }
