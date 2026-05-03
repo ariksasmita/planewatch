@@ -1,7 +1,5 @@
-// AviationStack API response types
-
 export interface Flight {
-  provider?: 'AeroDataBox' | 'AviationStack'
+  provider?: 'AeroDataBox'
   lastUpdatedUtc?: string
   distanceKm?: number
   codeshareStatus?: string
@@ -79,16 +77,6 @@ export interface LiveTracking {
   speed_horizontal: number
   speed_vertical: number
   is_ground: boolean
-}
-
-export interface AviationStackResponse {
-  pagination: {
-    limit: number
-    offset: number
-    count: number
-    total: number
-  }
-  data: Flight[]
 }
 
 export interface AirportDisplay {

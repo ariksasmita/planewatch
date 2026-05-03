@@ -26,7 +26,7 @@
     <footer class="border-t border-surface-700/30 mt-16">
       <div class="max-w-6xl mx-auto px-4 py-6 flex items-center justify-between text-xs text-surface-100/30">
         <span>PlaneWatch &copy; {{ new Date().getFullYear() }}</span>
-        <span>Powered by AeroDataBox, AviationStack & ADS-B</span>
+        <span>Powered by AeroDataBox & ADS-B</span>
       </div>
     </footer>
   </div>

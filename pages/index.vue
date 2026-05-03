@@ -70,7 +70,6 @@ import type { Flight } from '~/types/flight'
 
 const store = useFlightStore()
 const aeroDataBoxApi = useAeroDataBoxApi()
-const aviationStackApi = useAviationApi()
 const adsbApi = useAdsbApi()
 const cache = useFlightSearchCache()
 const router = useRouter()
@@ -127,26 +126,19 @@ async function handleSearch(code: string) {
   }
   catch (aeroError: any) {
     errors.push(aeroError?.message || 'AeroDataBox failed')
-    try {
-      // Secondary provider: AviationStack, if configured.
-      store.flights = await aviationStackApi.fetchByFlightCode(normalizedCode)
-      store.addRecentSearch(normalizedCode)
-    }
-    catch (aviationError: any) {
-      errors.push(aviationError?.message || 'AviationStack failed')
-      // Last fallback: live ADS-B callsign lookup. Best for ICAO-style callsigns: GIA401, DAL496.
-      try {
-        store.liveAircraft = await adsbApi.fetchByFlightCodeVariants(normalizedCode)
-        store.addRecentSearch(normalizedCode)
 
-        if (store.liveAircraft.length === 0) {
-          store.error = friendlySearchError(normalizedCode, errors)
-        }
-      }
-      catch (adsbError: any) {
-        errors.push(adsbError?.message || 'ADS-B failed')
+    // Last fallback: live ADS-B callsign lookup. Best for ICAO-style callsigns: GIA401, DAL496.
+    try {
+      store.liveAircraft = await adsbApi.fetchByFlightCodeVariants(normalizedCode)
+      store.addRecentSearch(normalizedCode)
+
+      if (store.liveAircraft.length === 0) {
         store.error = friendlySearchError(normalizedCode, errors)
       }
+    }
+    catch (adsbError: any) {
+      errors.push(adsbError?.message || 'ADS-B failed')
+      store.error = friendlySearchError(normalizedCode, errors)
     }
   }
   finally {

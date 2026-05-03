@@ -3,8 +3,7 @@
 ## Environment
 
 - [ ] `.env` exists
-- [ ] `AERODATABOX_RAPIDAPI_KEY` is set
-- [ ] Optional: `NUXT_PUBLIC_AVIATION_STACK_API_KEY` is set
+- [ ] `NUXT_AERODATABOX_RAPID_API_KEY` is set only as a private/server environment variable
 - [ ] `npm install` completed
 - [ ] `npm run build` passes
 
@@ -59,7 +58,7 @@ Run `npm run dev`, then test:
 
 - [ ] Search invalid value like `???`
   - [ ] Friendly invalid-format error appears
-- [ ] Temporarily remove `AERODATABOX_RAPIDAPI_KEY`
+- [ ] Temporarily remove `NUXT_AERODATABOX_RAPID_API_KEY`
   - [ ] Friendly provider configuration error appears
 - [ ] Search a nonsense but valid-looking code like `ZZ9999`
   - [ ] Friendly no-data error appears

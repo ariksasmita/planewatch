@@ -10,7 +10,6 @@ PlaneWatch is a Nuxt/Vue flight status tracker. Search by flight number or calls
 
 - Search by IATA flight number (`GA401`, `DL496`) or ICAO callsign (`GIA401`, `DAL496`)
 - AeroDataBox-powered scheduled flight data via private Nuxt server route
-- AviationStack fallback support
 - ADS-B live fallback using ADSB.lol
 - Automatic IATA → ICAO callsign variants for common airlines
 - Flight detail pages with refresh/direct URL support
@@ -28,7 +27,6 @@ PlaneWatch is a Nuxt/Vue flight status tracker. Search by flight number or calls
 - Pinia
 - Leaflet + OpenStreetMap/CARTO tiles
 - AeroDataBox via RapidAPI
-- AviationStack
 - ADSB.lol
 
 ## Setup
@@ -48,13 +46,10 @@ cp .env.example .env
 Configure keys:
 
 ```env
-AERODATABOX_RAPIDAPI_KEY=your_rapidapi_key_here
-NUXT_PUBLIC_AVIATION_STACK_API_KEY=your_aviationstack_key_here
+NUXT_AERODATABOX_RAPID_API_KEY=your_rapidapi_key_here
 ```
 
-`AERODATABOX_RAPIDAPI_KEY` is server-only and should never be exposed publicly.
-
-`NUXT_PUBLIC_AVIATION_STACK_API_KEY` is public because the current AviationStack fallback calls from the browser.
+`NUXT_AERODATABOX_RAPID_API_KEY` is server-only and should never be exposed publicly. The `NUXT_` prefix is Nuxt's runtime-config override mechanism; it is not public unless it starts with `NUXT_PUBLIC_`.
 
 ## Commands
 
@@ -78,11 +73,10 @@ Good options include:
 - Fly.io
 - Node server/VPS using `npm run build` and `.output/server/index.mjs`
 
-Set these environment variables in your hosting provider:
+Set this environment variable in your hosting provider:
 
 ```env
-AERODATABOX_RAPIDAPI_KEY=your_rapidapi_key_here
-NUXT_PUBLIC_AVIATION_STACK_API_KEY=your_aviationstack_key_here
+NUXT_AERODATABOX_RAPID_API_KEY=your_rapidapi_key_here
 ```
 
 If deploying to a purely static host, AeroDataBox calls will not work unless you also provide a separate backend/proxy for `/api/aerodatabox/flights/:code`.
@@ -103,12 +97,10 @@ DL496
 Search currently tries providers in this order:
 
 ```txt
-AeroDataBox → AviationStack → ADSB.lol
+AeroDataBox → ADSB.lol
 ```
 
 AeroDataBox provides scheduled/status data such as route, airline, timing, aircraft, and airport coordinates.
-
-AviationStack is kept as a fallback, but free-tier coverage may be limited.
 
 ADSB.lol is free/no-key and only provides live aircraft positions when an aircraft is currently visible by callsign.
 
@@ -126,7 +118,6 @@ Maps use Leaflet with free CARTO dark tiles based on OpenStreetMap data. No map 
 
 - ADS-B live overlay only appears when the aircraft is currently visible and broadcasting under a matching callsign.
 - Some flights may report `Unknown` status depending on provider data freshness.
-- AviationStack fallback may return no data on some free-tier/API-key combinations.
 - Direct detail page loads use the same external provider limits as normal searches.
 
 ## Project Structure

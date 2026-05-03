@@ -42,10 +42,10 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
-    aerodataboxRapidApiKey: process.env.AERODATABOX_RAPIDAPI_KEY || '',
-    public: {
-      aviationStackApiKey: process.env.NUXT_PUBLIC_AVIATION_STACK_API_KEY || '',
-    },
+    // Override at runtime with NUXT_AERODATABOX_RAPID_API_KEY.
+    // Do not read process.env here, because Netlify secret scanning can detect
+    // build-time env values serialized into Nitro output.
+    aerodataboxRapidApiKey: '',
   },
 
   tailwindcss: {
