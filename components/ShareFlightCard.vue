@@ -30,7 +30,7 @@
       </div>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+    <div class="grid grid-cols-2 gap-3 text-sm">
       <div class="rounded-2xl bg-surface-950/30 p-3 min-w-0">
         <p class="text-surface-100/35 mb-1">Departure</p>
         <p class="font-medium text-surface-50 truncate">{{ formatDisplayTime(flight.departure.times?.scheduledLocal, flight.departure.scheduled) }}</p>
