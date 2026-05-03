@@ -1,10 +1,10 @@
 <template>
   <div
-    class="rounded-2xl bg-surface-800/50 border border-surface-700/30 cursor-pointer hover:border-brand-500/30 hover:bg-surface-800/70 transition-all group p-4 sm:p-5"
+    class="relative rounded-2xl bg-surface-800/50 border border-surface-700/30 cursor-pointer hover:border-brand-500/30 hover:bg-surface-800/70 transition-all group p-4 sm:p-5"
     @click="$emit('click')"
   >
     <div class="md:flex md:items-center md:gap-6">
-      <div class="flex items-start gap-3 min-w-0 md:flex-1">
+      <div class="flex items-start gap-3 min-w-0 pr-20 md:pr-0 md:flex-1">
         <!-- Airline + flight code -->
         <div class="flex-shrink-0">
           <AirlineLogo :iata="flight.airline.iata" :name="flight.airline.name" size="lg" />
@@ -24,7 +24,7 @@
           </div>
         </div>
 
-        <div class="flex flex-shrink-0 items-center gap-1 md:order-3">
+        <div class="absolute right-3 top-3 flex flex-shrink-0 items-center gap-1 md:static md:order-3">
           <button
             class="w-9 h-9 rounded-full flex items-center justify-center text-surface-100/25 hover:text-brand-300 hover:bg-brand-500/10 transition-colors"
             :title="isRefreshing ? 'Refreshing flight' : 'Refresh this flight'"
