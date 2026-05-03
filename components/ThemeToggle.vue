@@ -4,7 +4,7 @@
     title="Toggle theme"
     @click="cycleMode"
   >
-    <Icon name="lucide:sun-moon" class="w-4 h-4" />
+    <IconTheme :mode="mode" class="w-4 h-4" />
     <span class="hidden sm:inline capitalize">{{ mode }}</span>
   </button>
 </template>
