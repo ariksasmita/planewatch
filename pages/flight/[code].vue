@@ -9,10 +9,7 @@
       Back to search
     </button>
 
-    <div v-if="isLoading" class="py-20 text-center">
-      <Icon name="lucide:loader-2" class="w-8 h-8 animate-spin text-brand-400 mx-auto mb-4" />
-      <p class="text-surface-100/40 text-sm">Loading flight details…</p>
-    </div>
+    <LoadingDetailSkeleton v-if="isLoading" />
 
     <div v-else-if="flight">
       <!-- Flight header -->
@@ -111,6 +108,7 @@ const route = useRoute()
 const router = useRouter()
 const aeroDataBoxApi = useAeroDataBoxApi()
 const adsbApi = useAdsbApi()
+const cache = useFlightSearchCache()
 
 const flightCode = (route.params.code as string).toUpperCase()
 const isLoading = ref(false)
@@ -180,13 +178,28 @@ onMounted(async () => {
     return
   }
 
+  const cached = cache.get(flightCode)
+  if (cached?.flights.length) {
+    store.flights = cached.flights
+    store.selectedFlight = cached.flights.find(f => f.flight.iata === flightCode || f.flight.icao === flightCode) ?? cached.flights[0]
+    await loadLiveOverlay()
+    return
+  }
+
   isLoading.value = true
   error.value = null
 
   try {
     const flights = await aeroDataBoxApi.fetchByFlightCode(flightCode)
     store.flights = flights
-    store.selectedFlight = flights[0] ?? null
+    store.selectedFlight = flights.find(f => f.flight.iata === flightCode || f.flight.icao === flightCode) ?? flights[0] ?? null
+
+    if (flights.length) {
+      cache.set(flightCode, {
+        flights,
+        liveAircraft: [],
+      })
+    }
 
     if (!store.selectedFlight) {
       error.value = `No flight data found for ${flightCode}`

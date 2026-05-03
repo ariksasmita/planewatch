@@ -20,8 +20,16 @@
       <RecentSearches :searches="store.recentSearches" @select="handleSearch" @clear="store.clearRecentSearches()" />
     </section>
 
+    <!-- Loading -->
+    <section v-if="store.isLoading" class="mb-12">
+      <h2 class="font-display text-xl font-semibold text-surface-100 mb-4">Searching</h2>
+      <div class="space-y-4">
+        <LoadingFlightCardSkeleton v-for="item in 3" :key="item" />
+      </div>
+    </section>
+
     <!-- Results -->
-    <section v-if="store.flights.length > 0 || store.liveAircraft.length > 0">
+    <section v-else-if="store.flights.length > 0 || store.liveAircraft.length > 0">
       <h2 class="font-display text-xl font-semibold text-surface-100 mb-4">Results</h2>
       <div class="space-y-4">
         <FlightStatusCard
