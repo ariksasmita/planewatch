@@ -13,7 +13,8 @@
         </NuxtLink>
 
         <div class="flex items-center gap-3">
-          <span class="text-xs text-surface-100/40 hidden sm:inline">Flight Status Tracker</span>
+          <span class="text-xs text-surface-100/40 hidden md:inline">Flight Status Tracker</span>
+          <ThemeToggle />
         </div>
       </div>
     </header>

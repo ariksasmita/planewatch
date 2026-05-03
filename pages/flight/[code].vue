@@ -29,10 +29,17 @@
         </button>
         <button
           class="inline-flex items-center gap-2 rounded-full border border-surface-700/50 px-3 py-1.5 text-sm text-surface-100/45 hover:border-brand-400/40 hover:text-brand-300 transition-colors"
+          @click="refreshFlight"
+        >
+          <Icon name="lucide:refresh-cw" class="w-4 h-4" :class="isRefreshing ? 'animate-spin' : ''" />
+          Refresh
+        </button>
+        <button
+          class="inline-flex items-center gap-2 rounded-full border border-surface-700/50 px-3 py-1.5 text-sm text-surface-100/45 hover:border-brand-400/40 hover:text-brand-300 transition-colors"
           @click="shareFlight"
         >
           <IconShare class="w-4 h-4" />
-          Share
+          {{ shareFeedback || 'Share' }}
         </button>
       </div>
 
@@ -57,6 +64,17 @@
             />
           </ClientOnly>
         </div>
+      </div>
+
+      <div class="grid lg:grid-cols-2 gap-6 mb-8">
+        <TimingInsight :departure="flight.departure" :arrival="flight.arrival" />
+        <AirportWeatherCard
+          v-if="flight.departure.location && flight.arrival.location"
+          :departure-code="flight.departure.iata || flight.departure.icao || 'DEP'"
+          :arrival-code="flight.arrival.iata || flight.arrival.icao || 'ARR'"
+          :departure="departureWeather"
+          :arrival="arrivalWeather"
+        />
       </div>
 
       <!-- Timeline -->
@@ -125,12 +143,17 @@ const route = useRoute()
 const router = useRouter()
 const aeroDataBoxApi = useAeroDataBoxApi()
 const adsbApi = useAdsbApi()
+const weatherApi = useWeatherApi()
 const cache = useFlightSearchCache()
 
 const flightCode = (route.params.code as string).toUpperCase()
 const isLoading = ref(false)
+const isRefreshing = ref(false)
 const isLoadingLiveOverlay = ref(false)
 const error = ref<string | null>(null)
+const shareFeedback = ref('')
+const departureWeather = ref(null as Awaited<ReturnType<typeof weatherApi.fetchCurrent>>)
+const arrivalWeather = ref(null as Awaited<ReturnType<typeof weatherApi.fetchCurrent>>)
 const liveOverlay = ref(null as null | {
   updated: string
   latitude: number
@@ -167,12 +190,54 @@ async function shareFlight() {
   const text = `${flight.value.flight.iata} ${flight.value.departure.iata || flight.value.departure.icao} → ${flight.value.arrival.iata || flight.value.arrival.icao} · ${flight.value.flight_status}`
   const url = window.location.href
 
-  if (navigator.share) {
-    await navigator.share({ title: `PlaneWatch ${flight.value.flight.iata}`, text, url })
-    return
+  try {
+    if (navigator.share) {
+      await navigator.share({ title: `PlaneWatch ${flight.value.flight.iata}`, text, url })
+      shareFeedback.value = 'Shared'
+    }
+    else {
+      await navigator.clipboard.writeText(`${text}\n${url}`)
+      shareFeedback.value = 'Copied!'
+    }
+  }
+  catch {
+    shareFeedback.value = ''
   }
 
-  await navigator.clipboard.writeText(`${text}\n${url}`)
+  window.setTimeout(() => {
+    shareFeedback.value = ''
+  }, 2000)
+}
+
+async function loadWeather() {
+  if (!flight.value?.departure.location || !flight.value?.arrival.location) return
+
+  const [departure, arrival] = await Promise.all([
+    weatherApi.fetchCurrent(flight.value.departure.location.lat, flight.value.departure.location.lon),
+    weatherApi.fetchCurrent(flight.value.arrival.location.lat, flight.value.arrival.location.lon),
+  ])
+
+  departureWeather.value = departure
+  arrivalWeather.value = arrival
+}
+
+async function refreshFlight() {
+  isRefreshing.value = true
+  error.value = null
+
+  try {
+    const flights = await aeroDataBoxApi.fetchByFlightCode(flightCode)
+    store.flights = flights
+    store.selectedFlight = flights.find(f => f.flight.iata === flightCode || f.flight.icao === flightCode) ?? flights[0] ?? null
+    liveOverlay.value = null
+    await Promise.all([loadLiveOverlay(), loadWeather()])
+  }
+  catch (refreshError: any) {
+    error.value = refreshError?.message || `Could not refresh ${flightCode}`
+  }
+  finally {
+    isRefreshing.value = false
+  }
 }
 
 async function loadLiveOverlay() {
@@ -205,7 +270,7 @@ async function loadLiveOverlay() {
 
 onMounted(async () => {
   if (flight.value) {
-    await loadLiveOverlay()
+    await Promise.all([loadLiveOverlay(), loadWeather()])
     return
   }
 
@@ -213,7 +278,7 @@ onMounted(async () => {
   if (cached?.flights.length) {
     store.flights = cached.flights
     store.selectedFlight = cached.flights.find(f => f.flight.iata === flightCode || f.flight.icao === flightCode) ?? cached.flights[0]
-    await loadLiveOverlay()
+    await Promise.all([loadLiveOverlay(), loadWeather()])
     return
   }
 
@@ -236,7 +301,7 @@ onMounted(async () => {
       error.value = `No flight data found for ${flightCode}`
     }
     else {
-      await loadLiveOverlay()
+      await Promise.all([loadLiveOverlay(), loadWeather()])
     }
   }
   catch (e: any) {
