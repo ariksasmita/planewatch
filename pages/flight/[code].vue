@@ -29,13 +29,17 @@
 
       <!-- Route map -->
       <div v-if="flight.departure.location && flight.arrival.location" class="mb-8">
-        <h3 class="font-display text-lg font-semibold text-surface-100 mb-4">Route Map</h3>
+        <div class="flex items-center justify-between gap-3 mb-4">
+          <h3 class="font-display text-lg font-semibold text-surface-100">Route Map</h3>
+          <span v-if="isLoadingLiveOverlay" class="text-xs text-surface-100/30">Checking live ADS-B…</span>
+          <span v-else-if="liveOverlay" class="text-xs text-amber-400">Live ADS-B overlay</span>
+        </div>
         <div class="bg-surface-800/50 rounded-2xl border border-surface-700/30 p-2 overflow-hidden">
           <ClientOnly>
             <RouteMap
               :departure="flight.departure"
               :arrival="flight.arrival"
-              :live="flight.live"
+              :live="flight.live || liveOverlay"
             />
           </ClientOnly>
         </div>
@@ -106,10 +110,22 @@ const store = useFlightStore()
 const route = useRoute()
 const router = useRouter()
 const aeroDataBoxApi = useAeroDataBoxApi()
+const adsbApi = useAdsbApi()
 
 const flightCode = (route.params.code as string).toUpperCase()
 const isLoading = ref(false)
+const isLoadingLiveOverlay = ref(false)
 const error = ref<string | null>(null)
+const liveOverlay = ref(null as null | {
+  updated: string
+  latitude: number
+  longitude: number
+  altitude: number
+  direction: number
+  speed_horizontal: number
+  speed_vertical: number
+  is_ground: boolean
+})
 
 const flight = computed(() => {
   if (store.selectedFlight?.flight.iata === flightCode || store.selectedFlight?.flight.icao === flightCode) {
@@ -130,8 +146,39 @@ function formatDateTime(iso: string) {
   })
 }
 
+async function loadLiveOverlay() {
+  if (!flight.value || flight.value.live) return
+
+  isLoadingLiveOverlay.value = true
+
+  try {
+    const callsign = flight.value.flight.icao || flightCode
+    const results = await adsbApi.fetchByFlightCodeVariants(callsign)
+    const aircraft = results[0]?.aircraft
+
+    if (aircraft && typeof aircraft.lat === 'number' && typeof aircraft.lon === 'number') {
+      liveOverlay.value = {
+        updated: new Date().toISOString(),
+        latitude: aircraft.lat,
+        longitude: aircraft.lon,
+        altitude: aircraft.alt_baro === 'ground' ? 0 : aircraft.alt_baro || aircraft.alt_geom || 0,
+        direction: aircraft.track || 0,
+        speed_horizontal: aircraft.gs || 0,
+        speed_vertical: aircraft.baro_rate || 0,
+        is_ground: aircraft.alt_baro === 'ground',
+      }
+    }
+  }
+  finally {
+    isLoadingLiveOverlay.value = false
+  }
+}
+
 onMounted(async () => {
-  if (flight.value) return
+  if (flight.value) {
+    await loadLiveOverlay()
+    return
+  }
 
   isLoading.value = true
   error.value = null
@@ -143,6 +190,9 @@ onMounted(async () => {
 
     if (!store.selectedFlight) {
       error.value = `No flight data found for ${flightCode}`
+    }
+    else {
+      await loadLiveOverlay()
     }
   }
   catch (e: any) {

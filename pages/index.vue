@@ -119,7 +119,7 @@ async function handleSearch(code: string) {
       errors.push(aviationError?.message || 'AviationStack failed')
       // Last fallback: live ADS-B callsign lookup. Best for ICAO-style callsigns: GIA401, DAL496.
       try {
-        store.liveAircraft = await adsbApi.fetchByCallsign(normalizedCode)
+        store.liveAircraft = await adsbApi.fetchByFlightCodeVariants(normalizedCode)
         store.addRecentSearch(normalizedCode)
 
         if (store.liveAircraft.length === 0) {

@@ -4,7 +4,7 @@ const ADSB_BASE_URL = 'https://api.adsb.lol/v2'
 
 export function useAdsbApi() {
   async function fetchByCallsign(callsignInput: string): Promise<LiveAircraftResult[]> {
-    const callsign = callsignInput.trim().toUpperCase().replace(/\s+/g, '')
+    const callsign = normalizeFlightCode(callsignInput)
 
     if (!callsign.match(/^[A-Z0-9]{3,8}$/)) {
       throw new Error('Use a callsign like GIA401 or DAL496')
@@ -26,5 +26,19 @@ export function useAdsbApi() {
     }))
   }
 
-  return { fetchByCallsign }
+  async function fetchByFlightCodeVariants(flightCode: string): Promise<LiveAircraftResult[]> {
+    for (const code of getFlightCodeVariants(flightCode)) {
+      try {
+        const results = await fetchByCallsign(code)
+        if (results.length > 0) return results
+      }
+      catch {
+        // Try next variant.
+      }
+    }
+
+    return []
+  }
+
+  return { fetchByCallsign, fetchByFlightCodeVariants }
 }

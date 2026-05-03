@@ -109,9 +109,17 @@ function aeroToFlight(flight: AeroDataBoxFlight): Flight {
 
 export function useAeroDataBoxApi() {
   async function fetchByFlightCode(flightCode: string): Promise<Flight[]> {
-    const code = flightCode.trim().toUpperCase().replace(/\s+/g, '')
-    const flights = await $fetch<AeroDataBoxFlight[]>(`/api/aerodatabox/flights/${code}`)
-    return flights.map(aeroToFlight)
+    const variants = getFlightCodeVariants(flightCode)
+    const results: Flight[] = []
+
+    for (const code of variants) {
+      const flights = await $fetch<AeroDataBoxFlight[]>(`/api/aerodatabox/flights/${code}`)
+      results.push(...flights.map(aeroToFlight))
+
+      if (results.length > 0) break
+    }
+
+    return results
   }
 
   return { fetchByFlightCode }
