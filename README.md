@@ -69,7 +69,7 @@ PlaneWatch is configured as a CSR Nuxt app, but it still uses a Nuxt server API 
 Good options include:
 
 - Vercel
-- Netlify (`netlify.toml` is included)
+- Netlify (`netlify.toml` is included; Nitro's Netlify preset publishes static assets from `dist`)
 - Render
 - Railway
 - Fly.io
