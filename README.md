@@ -2,7 +2,9 @@
 
 PlaneWatch is a Nuxt/Vue flight status tracker. Search by flight number or callsign to see current status, route, schedule timing, aircraft information, and a map of the route.
 
-![PlaneWatch home screen](docs/screenshot-home.png)
+![PlaneWatch home screen](docs/screenshots/home.png)
+
+![PlaneWatch flight details](docs/screenshots/details.png)
 
 ## Features
 
