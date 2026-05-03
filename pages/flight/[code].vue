@@ -58,6 +58,7 @@
         <div class="bg-surface-800/50 rounded-2xl border border-surface-700/30 p-2 overflow-hidden">
           <ClientOnly>
             <RouteMap
+              :key="routeMapKey"
               :departure="flight.departure"
               :arrival="flight.arrival"
               :live="flight.live || liveOverlay"
@@ -163,6 +164,11 @@ const liveOverlay = ref(null as null | {
   speed_horizontal: number
   speed_vertical: number
   is_ground: boolean
+})
+
+const routeMapKey = computed(() => {
+  const live = flight.value?.live || liveOverlay.value
+  return `${flightCode}-${live?.latitude ?? 'no-live'}-${live?.longitude ?? 'no-live'}`
 })
 
 const flight = computed(() => {
