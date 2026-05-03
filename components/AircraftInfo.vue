@@ -4,9 +4,7 @@
 
     <!-- Airline -->
     <div class="flex items-center gap-3 mb-5 pb-5 border-b border-surface-700/30">
-      <div class="w-10 h-10 rounded-lg bg-brand-500/10 flex items-center justify-center">
-        <Icon name="lucide:building-2" class="w-5 h-5 text-brand-400" />
-      </div>
+      <AirlineLogo :iata="airline.iata" :name="airline.name" size="md" />
       <div>
         <div class="text-surface-50 font-medium">{{ airline.name }}</div>
         <div class="text-xs text-surface-100/40">

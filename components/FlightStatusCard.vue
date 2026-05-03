@@ -4,9 +4,7 @@
   >
     <!-- Airline + flight code -->
     <div class="flex-shrink-0">
-      <div class="w-14 h-14 rounded-xl bg-surface-700/50 flex items-center justify-center group-hover:bg-brand-500/10 transition-colors text-brand-400">
-        <AppPlaneLogo size="lg" />
-      </div>
+      <AirlineLogo :iata="flight.airline.iata" :name="flight.airline.name" size="lg" />
     </div>
 
     <div class="flex-1 min-w-0">

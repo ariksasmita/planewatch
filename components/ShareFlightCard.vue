@@ -1,10 +1,13 @@
 <template>
   <div class="rounded-3xl border border-brand-500/20 bg-gradient-to-br from-surface-800 to-surface-900 p-6 shadow-2xl shadow-brand-950/20">
     <div class="flex items-start justify-between gap-4 mb-6">
-      <div>
-        <p class="text-xs uppercase tracking-[0.3em] text-brand-300/70 mb-2">PlaneWatch summary</p>
-        <h3 class="font-display text-3xl font-bold text-surface-50">{{ flight.flight.iata }}</h3>
-        <p class="text-sm text-surface-100/50">{{ flight.airline.name }}</p>
+      <div class="flex items-center gap-4">
+        <AirlineLogo :iata="flight.airline.iata" :name="flight.airline.name" size="xl" />
+        <div>
+          <p class="text-xs uppercase tracking-[0.3em] text-brand-300/70 mb-2">PlaneWatch summary</p>
+          <h3 class="font-display text-3xl font-bold text-surface-50">{{ flight.flight.iata }}</h3>
+          <p class="text-sm text-surface-100/50">{{ flight.airline.name }}</p>
+        </div>
       </div>
       <FlightStatusBadge :status="flight.flight_status" />
     </div>
