@@ -89,3 +89,25 @@ html.light .border-brand-400\/50 {
 html.light .placeholder\:text-surface-100\/30::placeholder {
   color: #94a3b8 !important;
 }
+
+html.light .flight-status-departed,
+html.light .flight-status-active,
+html.light .flight-status-landed {
+  background-color: #dcfce7 !important;
+  color: #166534 !important;
+}
+
+html.light .flight-status-delayed {
+  background-color: #fef3c7 !important;
+  color: #92400e !important;
+}
+
+html.light .flight-status-expected {
+  background-color: #cffafe !important;
+  color: #0e7490 !important;
+}
+
+html.light .flight-status-unknown {
+  background-color: #e2e8f0 !important;
+  color: #475569 !important;
+}

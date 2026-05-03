@@ -33,6 +33,8 @@ const label = computed(() => config.value.label)
 const statusIcon = computed(() => config.value.icon)
 
 const badgeClasses = computed(() => [
+  'flight-status-badge',
+  `flight-status-${props.status}`,
   'inline-flex items-center rounded-full text-xs font-medium px-2.5 py-1',
   config.value.color,
 ])
