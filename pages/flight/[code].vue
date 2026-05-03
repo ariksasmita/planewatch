@@ -5,7 +5,7 @@
       @click="router.push('/')"
       class="flex items-center gap-2 text-surface-100/50 hover:text-brand-400 transition-colors mb-6 text-sm"
     >
-      <Icon name="lucide:arrow-left" class="w-4 h-4" />
+      <IconArrowLeft class="w-4 h-4" />
       Back to search
     </button>
 
