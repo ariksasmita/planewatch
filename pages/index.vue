@@ -59,7 +59,7 @@
     <!-- Empty state -->
     <section v-if="store.flights.length === 0 && store.liveAircraft.length === 0 && !store.isLoading && !store.error" class="text-center py-16">
       <div class="w-20 h-20 rounded-2xl bg-surface-800 flex items-center justify-center mx-auto mb-4">
-        <Icon name="lucide:radar" class="w-10 h-10 text-surface-100/20" />
+        <IconLocal name="radar" class="w-10 h-10 text-surface-100/20" />
       </div>
       <p class="text-surface-100/30 text-sm">Search for a flight to get started</p>
     </section>

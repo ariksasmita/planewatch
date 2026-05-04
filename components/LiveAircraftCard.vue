@@ -25,7 +25,7 @@
       <div class="text-surface-100/40 text-xs">{{ altitudeLabel }}</div>
     </div>
 
-    <Icon name="lucide:chevron-right" class="w-5 h-5 text-surface-100/20 group-hover:text-amber-400 transition-colors" />
+    <IconLocal name="chevron-right" class="w-5 h-5 text-surface-100/20 group-hover:text-amber-400 transition-colors" />
   </div>
 </template>
 

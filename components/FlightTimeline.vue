@@ -7,7 +7,7 @@
       <div class="space-y-3">
         <div class="flex items-center justify-between gap-3 text-sm text-surface-100/50">
           <div class="flex items-center gap-2">
-            <Icon name="lucide:plane-takeoff" class="w-4 h-4 text-brand-400" />
+            <IconLocal name="plane-takeoff" class="w-4 h-4 text-brand-400" />
             Departure
           </div>
           <QualityTags v-if="departure.quality?.length" :items="departure.quality" />
@@ -27,7 +27,7 @@
       <div class="space-y-3">
         <div class="flex items-center justify-between gap-3 text-sm text-surface-100/50">
           <div class="flex items-center gap-2">
-            <Icon name="lucide:plane-landing" class="w-4 h-4 text-brand-400" />
+            <IconLocal name="plane-landing" class="w-4 h-4 text-brand-400" />
             Arrival
           </div>
           <QualityTags v-if="arrival.quality?.length" :items="arrival.quality" />

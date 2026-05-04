@@ -2,7 +2,7 @@
   <form @submit.prevent="handleSubmit" class="max-w-xl mx-auto">
     <div class="relative flex items-center">
       <div class="absolute left-4 text-surface-100/30">
-        <Icon name="lucide:search" class="w-5 h-5" />
+        <IconLocal name="search" class="w-5 h-5" />
       </div>
       <input
         ref="inputRef"
@@ -18,7 +18,7 @@
         class="absolute right-2 h-10 px-6 rounded-xl bg-brand-500 text-surface-950 font-display font-semibold text-sm hover:bg-brand-400 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
       >
         <span v-if="isLoading">
-          <Icon name="lucide:loader-2" class="w-5 h-5 animate-spin" />
+          <IconLocal name="loader" class="w-5 h-5 animate-spin" />
         </span>
         <span v-else>Track</span>
       </button>

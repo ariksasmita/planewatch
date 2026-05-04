@@ -4,7 +4,7 @@
       @click="router.push('/')"
       class="flex items-center gap-2 text-surface-100/50 hover:text-brand-400 transition-colors mb-6 text-sm"
     >
-      <Icon name="lucide:arrow-left" class="w-4 h-4" />
+      <IconArrowLeft class="w-4 h-4" />
       Back to search
     </button>
 
@@ -58,7 +58,7 @@
 
     <div v-else class="text-center py-20">
       <div class="w-20 h-20 rounded-2xl bg-surface-800 flex items-center justify-center mx-auto mb-4">
-        <Icon name="lucide:radar" class="w-10 h-10 text-surface-100/20" />
+        <IconLocal name="radar" class="w-10 h-10 text-surface-100/20" />
       </div>
       <h2 class="font-display text-xl font-semibold text-surface-100 mb-2">Live aircraft not found</h2>
       <p class="text-surface-100/50 text-sm mb-6">Try searching again from the homepage.</p>

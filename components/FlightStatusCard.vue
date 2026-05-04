@@ -52,7 +52,7 @@
         </div>
 
         <div class="flex items-center text-surface-100/20 px-1">
-          <Icon name="lucide:move-right" class="w-5 h-5" />
+          <IconLocal name="move-right" class="w-5 h-5" />
         </div>
 
         <div class="min-w-0 text-right sm:text-left">
